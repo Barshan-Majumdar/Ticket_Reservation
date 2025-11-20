@@ -1,0 +1,21 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Profile</h2>
+    <div class="card">
+        <div class="card-body">
+            {% if user_profile %}
+                <p><strong>Name:</strong> {{ user_profile.name }}</p>
+                <p><strong>Phone:</strong> {{ user_profile.phone }}</p>
+                <p><strong>Email:</strong> {{ user_profile.email }}</p>
+            {% else %}
+                <div class="alert alert-info">No profile data found.</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="d-grid gap-2 mt-4">
+        <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+{% endblock %}

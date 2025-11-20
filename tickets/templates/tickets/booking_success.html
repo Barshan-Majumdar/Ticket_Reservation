@@ -1,0 +1,58 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Purchase Successful!</h4>
+        <p>Your ticket has been booked successfully. You can view your ticket details below.</p>
+        <hr>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal">
+            View Your Ticket
+        </button>
+    </div>
+</div>
+
+<!-- Ticket Modal -->
+<div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketModalLabel">Your E-Ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <p><strong>Journey Details</strong></p>
+                    <p><strong>FROM:</strong> {{ source }}<br><strong>TO:</strong> {{ destination }}</p>
+                    <hr>
+                    <p><strong>Total Fare:</strong> ₹{{ fare }}</p>
+                    <p><small class="text-muted">Single Journey</small></p>
+                    <hr>
+                    <p><strong>Status:</strong> <span class="text-success">CONFIRMED</span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Save the ticket to localStorage
+    const ticket = {
+        source: "{{ source }}",
+        destination: "{{ destination }}",
+        fare: "{{ fare }}",
+        purchaseTime: new Date().getTime()
+    };
+
+    let tickets = JSON.parse(localStorage.getItem('myTickets')) || [];
+    tickets.push(ticket);
+    localStorage.setItem('myTickets', JSON.stringify(tickets));
+
+    // Automatically open the modal when the page loads
+    var myModal = new bootstrap.Modal(document.getElementById('ticketModal'), {});
+    myModal.show();
+</script>
+{% endblock %}

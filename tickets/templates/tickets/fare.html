@@ -1,0 +1,31 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        <h5>Confirm Your Ticket</h5>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Journey Details</h5>
+        <p class="card-text">
+            <strong>FROM:</strong> {{ source }}<br>
+            <strong>TO:</strong> {{ destination }}
+        </p>
+        <hr>
+        <p class="card-text">Total Fare</p>
+        <h1 class="display-4"><strong>₹{{ fare }}</strong></h1>
+        <p class="card-text"><small class="text-muted">Single Journey</small></p>
+        <form action="{% url 'booking_success' %}" method="get">
+            <input type="hidden" name="source" value="{{ source }}">
+            <input type="hidden" name="destination" value="{{ destination }}">
+            <input type="hidden" name="fare" value="{{ fare }}">
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Confirm Ticket Booking</button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-muted">
+        Please complete the payment to book your ticket.
+    </div>
+</div>
+{% endblock %}

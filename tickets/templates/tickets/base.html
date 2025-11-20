@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rail Mate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Light Theme (Default) */
+        :root {
+            --bs-body-bg: #f8f9fa;
+            --bs-body-color: #212529;
+            --bs-card-bg: #fff;
+            --bs-border-color: #dee2e6;
+        }
+
+        .navbar {
+            background-color: #003366; /* Dark Blue */
+        }
+
+        .navbar-brand, .nav-link, .form-check-label {
+            color: white !important;
+        }
+
+        .bottom-nav {
+            background-color: white;
+            border-top: 1px solid var(--bs-border-color);
+            padding: 0.5rem 0;
+        }
+        .bottom-nav a { color: #003366; }
+        .bottom-nav .active { color: #007bff; }
+
+        /* Dark Theme */
+        [data-bs-theme="dark"] {
+            --bs-body-bg: #121212;
+            --bs-body-color: #e0e0e0;
+            --bs-card-bg: #1e1e1e;
+            --bs-border-color: #424242;
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background-color: #1a1a1a !important;
+        }
+
+        [data-bs-theme="dark"] .bottom-nav {
+            background-color: #1a1a1a;
+            border-top: 1px solid var(--bs-border-color);
+        }
+
+        [data-bs-theme="dark"] .bottom-nav a { color: #e0e0e0; }
+        [data-bs-theme="dark"] .bottom-nav .active { color: #0d6efd; }
+
+        [data-bs-theme="dark"] .card {
+            background-color: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+        }
+        
+        /* jQuery UI Autocomplete Dark Theme */
+        [data-bs-theme="dark"] .ui-autocomplete {
+            background-color: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+            color: var(--bs-body-color);
+        }
+
+        [data-bs-theme="dark"] .ui-menu-item .ui-menu-item-wrapper {
+            color: var(--bs-body-color);
+        }
+
+        [data-bs-theme="dark"] .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+            background-color: #0d6efd;
+            color: #fff;
+            border: none;
+        }
+
+        /* General Styles */
+        body {
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .bottom-nav a { text-decoration: none; }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"  style="font-weight: 600; font-family: sans-serif; font-size: larger;">Rail Mate</a>
+            <div class="form-check form-switch ms-auto">
+                <input class="form-check-input" type="checkbox" role="switch" id="theme-toggle">
+                <label class="form-check-label" for="theme-toggle"><i class="bi text-white" id="theme-icon"></i></label>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-5 pb-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="bottom-nav text-center">
+        <div class="row">
+            <div class="col">
+                <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">
+                    <i class="bi bi-house-door-fill fs-4"></i>
+                    <div>Home</div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="{% url 'my_passes' %}" class="{% if 'my_passes' in request.path %}active{% endif %}">
+                    <i class="bi bi-ticket-detailed-fill fs-4"></i>
+                    <div>My Passes</div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="{% url 'profile' %}" class="{% if 'profile' in request.path %}active{% endif %}">
+                    <i class="bi bi-person-circle fs-4"></i>
+                    <div>Profile</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const themeIcon = document.getElementById('theme-icon');
+
+        const updateIcon = (theme) => {
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-brightness-high-fill');
+                themeIcon.classList.add('bi-moon-stars-fill');
+            } else {
+                themeIcon.classList.remove('bi-moon-stars-fill');
+                themeIcon.classList.add('bi-brightness-high-fill');
+            }
+        };
+
+        const setTheme = (theme) => {
+            htmlElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeToggle.checked = theme === 'dark';
+            updateIcon(theme);
+        };
+
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+        setTheme(savedTheme);
+
+        themeToggle.addEventListener('change', () => {
+            const newTheme = themeToggle.checked ? 'dark' : 'light';
+            setTheme(newTheme);
+        });
+    </script>
+</body>
+</html>

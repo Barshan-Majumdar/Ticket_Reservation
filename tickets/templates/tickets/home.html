@@ -1,0 +1,81 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h4 >Welcome to Rail Mate😊</h4>
+    <p >Ready to book your next trip? Find your train below.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form action="{% url 'show_fare' %}" method="get">
+            <div class="mb-3">
+                <label for="from-station" class="form-label">FROM</label>
+                <input type="text" class="form-control" id="from-station" name="source" placeholder="Select Source Station...">
+            </div>
+            <div class="text-center my-2">
+                <i class="bi bi-arrow-down-up"></i>
+            </div>
+            <div class="mb-3">
+                <label for="to-station" class="form-label">TO</label>
+                <input type="text" class="form-control" id="to-station" name="destination" placeholder="Select Destination Station...">
+            </div>
+            <!-- <div class="alert alert-info" role="alert">
+                Next Train @ 6:15 PM - Platform 2
+            </div> -->
+            <div class="d-grid mt-10">
+                <button type="submit" id="find-trains-btn" class="btn btn-primary btn-lg" disabled>Find Trains & Book Ticket</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$(function() {
+    // First, fetch the list of all available stations
+    $.ajax({
+        url: "{% url 'station_suggestions' %}",
+        dataType: "json",
+        success: function(availableStations) {
+
+            function validateAndEnableSubmit() {
+                var from = $('#from-station').val();
+                var to = $('#to-station').val();
+                var fromValid = availableStations.indexOf(from) > -1;
+                var toValid = availableStations.indexOf(to) > -1;
+                var differentStations = from !== to;
+
+                if (fromValid && toValid && differentStations) {
+                    $('#find-trains-btn').prop('disabled', false);
+                } else {
+                    $('#find-trains-btn').prop('disabled', true);
+                }
+            }
+
+            $("#from-station, #to-station").on('keyup change', validateAndEnableSubmit);
+
+            $("#from-station").autocomplete({
+                source: availableStations,
+                minLength: 1,
+                select: function(event, ui) {
+                    $(this).val(ui.item.value);
+                    validateAndEnableSubmit();
+                }
+            });
+
+            $("#to-station").autocomplete({
+                source: availableStations,
+                minLength: 1,
+                select: function(event, ui) {
+                    $(this).val(ui.item.value);
+                    validateAndEnableSubmit();
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

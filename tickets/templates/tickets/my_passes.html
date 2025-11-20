@@ -1,0 +1,36 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Passes</h2>
+    <div id="passes-container"></div>
+</div>
+
+<script>
+    const passesContainer = document.getElementById('passes-container');
+    let tickets = JSON.parse(localStorage.getItem('myTickets')) || [];
+
+    // Filter out expired tickets
+    const now = new Date().getTime();
+    const oneHour = 60 * 60 * 1000;
+    tickets = tickets.filter(ticket => (now - ticket.purchaseTime) < oneHour);
+    localStorage.setItem('myTickets', JSON.stringify(tickets));
+
+    if (tickets.length === 0) {
+        passesContainer.innerHTML = '<div class="alert alert-info">You have no active passes.</div>';
+    } else {
+        tickets.forEach(ticket => {
+            const card = `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Journey: ${ticket.source} to ${ticket.destination}</h5>
+                        <p class="card-text"><strong>Fare:</strong> ₹${ticket.fare}</p>
+                        <p class="card-text"><small class="text-muted">Purchased at: ${new Date(ticket.purchaseTime).toLocaleTimeString()}</small></p>
+                    </div>
+                </div>
+            `;
+            passesContainer.innerHTML += card;
+        });
+    }
+</script>
+{% endblock %}
