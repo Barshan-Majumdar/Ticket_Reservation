@@ -30,6 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '8000-firebase-ticket-reservation-1763296388305.cluster-osvg2nzmmzhzqqjio6oojllbg4.cloudworkstations.dev',
     '127.0.0.1',
+    'ticket-reservation-4.onrender.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://8000-firebase-ticket-reservation-1763296388305.cluster-osvg2nzmmzhzqqjio6oojllbg4.cloudworkstations.dev']
