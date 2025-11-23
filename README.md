@@ -44,7 +44,7 @@ Get your local copy up and running in a few simple steps.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/arpan7sarkar/ticket-reservation
+    git clone https://github.com/Barshan-Majumdar/Ticket_Reservation.git
     cd ticket-reservation
     ```
 
