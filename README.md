@@ -1,4 +1,4 @@
-# Rail Mate 🚆
+# Rail Mate 
 
 **Seamless Train Travel Starts Here. Your Ultimate Digital Ticketing Companion.**
 
